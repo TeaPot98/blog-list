@@ -6,6 +6,8 @@ const blogsRouter = require('./controllers/blogs')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 
+const listHelper = require('./utils/list_helper')
+
 logger.info('connecting to', config.MONGODB_URI)
 
 mongoose.connect(config.MONGODB_URI)
@@ -15,7 +17,7 @@ mongoose.connect(config.MONGODB_URI)
 	.catch(error => {
 		logger.error('error connecting to MongoDB: ', error.message)
 	})
-
+	
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
