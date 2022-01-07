@@ -1,6 +1,7 @@
 const supertest = require('supertest')
 const mongoose = require('mongoose')
 const helper = require('./test_helper')
+const middleware = require('../utils/middleware')
 const app = require('../app')
 const api = supertest(app)
 
@@ -39,6 +40,7 @@ test('successfully created new blog', async () => {
     await api
         .post('/api/blogs')
         .send(newBlog)
+        .set('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3Q1IiwiaWQiOiI2MWQ3ZjVhN2I2N2Y1N2UyMzZkYTE1MDkiLCJpYXQiOjE2NDE1NTc2NTl9.0zBQkx4OvcMor0xyfgy_AZT4umchs1W9vcfPinzCizc`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -49,7 +51,7 @@ test('successfully created new blog', async () => {
     expect(titles).toContain(
         'simple blog'
     )
-})
+}, 10000)
 
 afterAll(() => {
     mongoose.connection.close()
