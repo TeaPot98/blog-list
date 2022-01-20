@@ -48,11 +48,13 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 blogsRouter.delete('/:id',middleware.userExtractor , async (request, response) => {
 	const user = request.user
 	logger.info('User: ', user)
-
+	logger.info('Entering the remove handler')
 	const blog = await Blog.findById(request.params.id)
-
+	logger.info(blog)
+	logger.info('Id of blog', request.params.id)
 	if (blog.user.toString() === user._id.toString()) {
 		await blog.remove()
+		logger.info('Successfull removed blog', blog)
 	}
 
 	response.status(204).end()
