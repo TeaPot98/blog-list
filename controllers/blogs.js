@@ -37,10 +37,22 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 		user: user._id
 	})
 
-	const savedBlog = await blog.save()
+	let savedBlog = await blog.save()
+	savedBlog = savedBlog.toJSON()
 	
-	user.blogs = user.blogs.concat(savedBlog._id)
+	user.blogs = user.blogs.concat(savedBlog.id)
 	await user.save()
+
+	savedBlog = {
+		...savedBlog,
+		user: {
+			'username': user.username,
+			'name': user.name,
+			'id': user._id.toString()
+		}
+	}
+
+	logger.info('The savedBlog sent to the frontend >>> ', savedBlog)
 
 	response.status(201).json(savedBlog)
 })
